@@ -44,8 +44,8 @@ class OAuthController  @Inject()(accountsDAO : AccountsDAO,
   }
 
   def access = Action.async { implicit request =>
-       val result =  issueAccessToken(new MyDataHandler())
-    Logger.error("Access result:  "+ result.map{_.toString()})
+    val result = issueAccessToken(new MyDataHandler())
+    result.map { r => Logger.error("Access result " + r.toString()) }
     result
   }
 
