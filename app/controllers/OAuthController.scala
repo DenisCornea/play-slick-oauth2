@@ -9,6 +9,7 @@ import scala.concurrent.Future
 import scalaoauth2.provider._
 import scalaoauth2.provider.OAuth2ProviderActionBuilders._
 import play.api.Logger
+import play.mvc.Results
 
 
 class OAuthController  @Inject()(accountsDAO : AccountsDAO,
@@ -85,7 +86,7 @@ class OAuthController  @Inject()(accountsDAO : AccountsDAO,
           new Status(e.statusCode)(responseOAuthErrorJson(e)).withHeaders(responseOAuthErrorHeader(e))
         case Right(value) =>
           Logger.error("Authorization response - authorization_code: " + value)
-          Ok(Json.toJson(Map[String, JsValue]("authorization_code" -> JsString(value)))).withHeaders("Cache-Control" -> "no-store", "Pragma" -> "no-cache")
+          Redirect(request.getQueryString("redirect_uri").getOrElse(""), Map("authorization_code"-> Seq(value)))
       }
     }
   }
