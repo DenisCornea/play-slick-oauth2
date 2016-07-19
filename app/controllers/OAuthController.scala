@@ -8,6 +8,7 @@ import play.api.mvc.{Action, Controller}
 import scala.concurrent.Future
 import scalaoauth2.provider._
 import scalaoauth2.provider.OAuth2ProviderActionBuilders._
+import play.api.Logger
 
 
 class OAuthController  @Inject()(accountsDAO : AccountsDAO,
@@ -53,6 +54,7 @@ class OAuthController  @Inject()(accountsDAO : AccountsDAO,
 
   def authorizationCode = Action.async { implicit request =>
 
+    Logger.error("Request: " + request.toString + "with query string" + request.rawQueryString)
     val futureResult: Future[Either[OAuthError, String]] =
       accountsDAO.authenticate(
         request.getQueryString("username").getOrElse(""),
