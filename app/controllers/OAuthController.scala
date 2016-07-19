@@ -44,7 +44,9 @@ class OAuthController  @Inject()(accountsDAO : AccountsDAO,
   }
 
   def access = Action.async { implicit request =>
-        issueAccessToken(new MyDataHandler())
+       val result =  issueAccessToken(new MyDataHandler())
+    Logger.error("Access result:  "+ result.map{_.toString()})
+    result
   }
 
 
@@ -54,7 +56,7 @@ class OAuthController  @Inject()(accountsDAO : AccountsDAO,
 
   def authorizationCode = Action.async { implicit request =>
 
-    Logger.error("Request: " + request.toString + "with query string" + request.rawQueryString)
+    Logger.error("Request: " + request.toString + " with query string " + request.rawQueryString)
     val futureResult: Future[Either[OAuthError, String]] =
       accountsDAO.authenticate(
         request.getQueryString("username").getOrElse(""),
@@ -78,8 +80,11 @@ class OAuthController  @Inject()(accountsDAO : AccountsDAO,
 
     futureResult.map { result =>
       result match {
-        case Left(e) => new Status(e.statusCode)(responseOAuthErrorJson(e)).withHeaders(responseOAuthErrorHeader(e))
+        case Left(e) =>
+          Logger.error("Error authorization response " + e.description)
+          new Status(e.statusCode)(responseOAuthErrorJson(e)).withHeaders(responseOAuthErrorHeader(e))
         case Right(value) =>
+          Logger.error("Authorization response - authorization_code: " + value)
           Ok(Json.toJson(Map[String, JsValue]("authorization_code" -> JsString(value)))).withHeaders("Cache-Control" -> "no-store", "Pragma" -> "no-cache")
       }
     }
