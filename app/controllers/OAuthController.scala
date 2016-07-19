@@ -87,8 +87,8 @@ class OAuthController  @Inject()(accountsDAO : AccountsDAO,
         case Right(value) =>
           Logger.error("Authorization response - authorization_code: " + value)
           Logger.error("Redirect to: " + request.getQueryString("redirect_uri").getOrElse(""))
-          Logger.error("The redirect: "+ Redirect(request.getQueryString("redirect_uri").getOrElse(""), Map("authorization_code"-> Seq(value))).header.headers)
-          Redirect(request.getQueryString("redirect_uri").getOrElse(""), Map("authorization_code"-> Seq(value)))
+          Logger.error("The redirect: "+ Redirect(request.getQueryString("redirect_uri").getOrElse(""), Map("code"-> Seq(value))).header.headers)
+          Redirect(request.getQueryString("redirect_uri").getOrElse(""), Map("code"-> Seq(value)))
       }
     }
   }
