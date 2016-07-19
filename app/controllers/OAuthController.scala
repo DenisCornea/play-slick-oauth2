@@ -36,23 +36,25 @@ class OAuthController  @Inject()(accountsDAO : AccountsDAO,
     )
   }
 
-  def accessToken = Action.async { implicit request =>
-    issueAccessToken(new MyDataHandler())
+  def access = Action.async { implicit request =>
+        issueAccessToken(new MyDataHandler())
   }
+
 
   def resources = AuthorizedAction(new MyDataHandler()) { request =>
     Ok(Json.toJson(request.authInfo))
   }
 
-  def authorizationCode = Action.async(parse.json){ implicit request =>
+  def authorizationCode = Action.async { implicit request =>
+
     val futureResult: Future[Either[OAuthError, String]] =
       accountsDAO.authenticate(
-        (request.body\"username").asOpt[String].getOrElse(""),
-        (request.body\"password").asOpt[String].getOrElse("")).flatMap {
+        request.getQueryString("username").getOrElse(""),
+        request.getQueryString("password").getOrElse("")).flatMap {
         accountMaybe =>
           accountMaybe match {
             case Some(account) =>
-              val clientFuture = oauthClientsDAO.findByClientId((request.body\"client").asOpt[String].getOrElse(""))
+              val clientFuture = oauthClientsDAO.findByClientId( request.getQueryString("client").getOrElse(""))
               clientFuture.flatMap { clientMaybe =>
                 clientMaybe match {
                   case Some(client) =>

@@ -23,6 +23,8 @@ insert into "oauth_clients"("owner_id", "grant_type", "client_id", "client_secre
   values (2, 'authorization_code', 'alice_client_id', 'alice_client_secret', 'http://localhost:3000/callback');
 insert into "oauth_clients"("owner_id", "grant_type", "client_id", "client_secret")
   values (2, 'password', 'alice_client_id2', 'alice_client_secret2');
+insert into "oauth_clients"("owner_id", "grant_type", "client_id", "client_secret")
+    values (1, 'authorization_code', 'zapier', 'zapierSecret');
 
 insert into "oauth_authorization_codes"("account_id", "oauth_client_id", "code", "redirect_uri")
     values (1, 2, 'bob_code', 'http://localhost:3000/callback');

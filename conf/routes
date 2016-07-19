@@ -3,9 +3,10 @@
 # ~~~~
 
 #route for oauth token
-POST    /oauth/access_token         controllers.OAuthController.accessToken
+POST    /oauth/access               controllers.OAuthController.access
+GET     /oauth/refresh              controllers.OAuthController.access
 
-POST    /oauth/authorize            controllers.OAuthController.authorizationCode
+GET    /oauth/authorize             controllers.OAuthController.authorizationCode
 
 #authorized route
 GET     /resources                  controllers.OAuthController.resources
