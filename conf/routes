@@ -5,8 +5,10 @@
 #route for oauth token
 POST    /oauth/access               controllers.OAuthController.access
 GET     /oauth/refresh              controllers.OAuthController.access
-
 GET    /oauth/authorize             controllers.OAuthController.authorizationCode
 
 #authorized route
 GET     /resources                  controllers.OAuthController.resources
+
+#home
+GET     /                           controllers.OAuthController.index

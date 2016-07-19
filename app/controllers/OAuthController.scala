@@ -36,6 +36,12 @@ class OAuthController  @Inject()(accountsDAO : AccountsDAO,
     )
   }
 
+  def index = Action.async { implicit request =>
+    Future.successful(
+      Ok(Json.toJson(Map[String, JsValue]("welcome_message" -> JsString("Welcome!"))))
+        .withHeaders("Cache-Control" -> "no-store", "Pragma" -> "no-cache"))
+  }
+
   def access = Action.async { implicit request =>
         issueAccessToken(new MyDataHandler())
   }
